@@ -1,15 +1,3 @@
-// séparer le code de démo du code du plugin en lui meme dans le package de telechargement, & filer un exemple : enfin on vera tout ca sur le github de toute facon
-jQuery(document).ready(function($){
-
-
-    $('#content').backtotop({
-        topOffset: 500,
-        animationSpeed: 2000,
-        bckTopLinkTitle: 'Retour en haut de page'
-    });
-});
-
-
 /*
 jQuery Scroll To Top Plugin
 Appends a link allowing you to go back to the top of the page after you've scrolled down a certain distance
@@ -45,7 +33,7 @@ copyright NOE Interactive
         					e.preventDefault();
     	                    $b.animate({scrollTop: $topAnchor.position().top},settings.animationSpeed,settings.animationEase);
 	                        return false;
-        				}); //on utilise le fait que les méthodes de jQuery soit chainable pour tout faire en un coup
+        				});
 
         $w.scroll(_sc);
         _sc();//First launch without scroll
