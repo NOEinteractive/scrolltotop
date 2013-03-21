@@ -8,15 +8,17 @@
     for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
         window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
         window.cancelAnimationFrame =
-          window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+        window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
     }
 
     if (!window.requestAnimationFrame)
         window.requestAnimationFrame = function(callback, element) {
             var currTime = new Date().getTime();
             var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-              timeToCall);
+            var id = window.setTimeout(function() {
+                callback(currTime + timeToCall);
+            },
+            timeToCall);
             lastTime = currTime + timeToCall;
             return id;
         };
@@ -33,14 +35,15 @@
  * version 0.1
  * License MIT
  */
-(function($, $w, $b) {
-	"use strict";
+(function($, $w) {
+    "use strict";
     $.fn.scrollHelper = function(options) {
-		//Options
-		var settings = {
-			topAnchor : 'body', //Selector of the element you want to reach when you go back up
-			classes : ['scroll-helper-instance'],
-			animationSpeed: 1000, //The speed of the animation to go back to top
+        var $b = $('html,body');
+        //Options
+        var settings = {
+            topAnchor : 'body', //Selector of the element you want to reach when you go back up
+            classes : ['scroll-helper-instance'],
+            animationSpeed: 1000, //The speed of the animation to go back to top
             animationEase: 'swing', //The easing function used for the animation            
             goTop : {
                 classes : 'back-to-top',
@@ -52,30 +55,37 @@
             goBottom : {
                 classes : 'go-to-bottom',
                 title : 'scroll down the page',
-                scrollTo : function() {return $w.scrollTop() + $b.height() * 0.6},
+                scrollTo : function() {
+                    return $w.scrollTop() + $b.height() * 0.6
+                    },
                 hideOn : 200,
                 showOn : -200 //inertia of scroll on mac gives negative scrollTop value                
             },
             scroll : null,
             scrollStop : null,
             scrollBegin : null
-		};
+        };
 
-		options && $.extend(settings, options);
+        options && $.extend(settings, options);
 		
-		//variables definition
-		//We store all the selectors we are going to need
-		var $bckTop = $(this),
-		isVisible = false,
-		isScrolling = false,
-		self = this,
-		timerScroll = null,
-		scrollTop = 0,
-		lastScrollTop = 0,
-		side = '',
-		state = '', //current state of the <a>, can be top or bottom
-		//Link creation
-        $bckTopLink = $('<a>', {'class' : settings.classes.join(' ')}).appendTo($bckTop).click(function(e) {e.preventDefault(); _click();});
+        //variables definition
+        //We store all the selectors we are going to need
+        var $bckTop = $(this),
+        isVisible = false,
+        isScrolling = false,
+        self = this,
+        timerScroll = null,
+        scrollTop = 0,
+        lastScrollTop = 0,
+        side = '',
+        state = '', //current state of the <a>, can be top or bottom
+        //Link creation
+        $bckTopLink = $('<a>', {
+            'class' : settings.classes.join(' ')
+            }).appendTo($bckTop).click(function(e) {
+            e.preventDefault();
+            _click();
+        });
         
         //public methods that can be overridden
         //var toRemove = [];
@@ -96,15 +106,15 @@
                 $bckTopLink.removeClass(settings.goTop.classes);
             } 
             
-             if((!settings.goBottom.hideOn || scrollTop <= settings.goBottom.hideOn) && scrollTop >= settings.goBottom.showOn) {
-                 if(state !== 'bottom') {
+            if((!settings.goBottom.hideOn || scrollTop <= settings.goBottom.hideOn) && scrollTop >= settings.goBottom.showOn) {
+                if(state !== 'bottom') {
                     state = 'bottom';  
                     $bckTopLink.text(settings.goBottom.title).addClass(settings.goBottom.classes);
                 }
             } else if(state === 'bottom') {
                 state = '';
                 $bckTopLink.removeClass(settings.goBottom.classes);
-                //toRemove.push(settings.goBottom.classes);
+            //toRemove.push(settings.goBottom.classes);
             }
             /*
             if(lastState === '' && state !== '') {
@@ -115,7 +125,11 @@
                     toRemove = [];
                 });
             }*/
-            isScrolling === true ? requestAnimationFrame(function() {self.scrollRAF.call(self);})  : function() { self.endScroll.call(self);}();
+            isScrolling === true ? requestAnimationFrame(function() {
+                self.scrollRAF.call(self);
+            })  : function() {
+                self.endScroll.call(self);
+            }();
         }
 
         this.startScroll = function() {
@@ -156,7 +170,8 @@
         
         function _click() {
             if(state !== '') {
-                $b.animate({scrollTop: 
+                $b.animate({
+                    scrollTop: 
                     state == 'bottom' ? (typeof settings.goBottom.scrollTo === 'function' ? settings.goBottom.scrollTo() : settings.goBottom.scrollTo) : 
                     (typeof settings.goTop.scrollTo === 'function' ? settings.goTop.scrollTo() : settings.goTop.scrollTo)       
                 },settings.animationSpeed,settings.animationEase);
