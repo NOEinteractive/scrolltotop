@@ -28,11 +28,11 @@
 }());
 
 /*!
-jQuery Scroll To Top Plugin
-Appends a link allowing you to go back to the top of the page after you've scrolled down a certain distance
-version 1
-copyright NOE Interactive
-*/
+ * jQuery Scroll Helper Plugin
+ * Help both visitor and dev with the scroll!
+ * version 0.1
+ * License MIT
+ */
 (function($, $w, $b) {
 	"use strict";
     $.fn.scrollHelper = function(options) {
@@ -43,14 +43,14 @@ copyright NOE Interactive
 			animationSpeed: 1000, //The speed of the animation to go back to top
             animationEase: 'swing', //The easing function used for the animation            
             goTop : {
-                class : 'back-to-top',
+                classes : 'back-to-top',
                 title : 'go back to the top of the page',
                 scrollTo : 0,
                 hideOn : null,
                 showOn : 600
             },
             goBottom : {
-                class : 'go-to-bottom',
+                classes : 'go-to-bottom',
                 title : 'scroll down the page',
                 scrollTo : function() {return $w.scrollTop() + $b.height() * 0.6},
                 hideOn : 200,
@@ -58,7 +58,7 @@ copyright NOE Interactive
             },
             scroll : null,
             scrollStop : null,
-            scrollBegin : null,
+            scrollBegin : null
 		};
 
 		options && $.extend(settings, options);
@@ -75,16 +75,10 @@ copyright NOE Interactive
 		side = '',
 		state = '', //current state of the <a>, can be top or bottom
 		//Link creation
-        $bckTopLink = $('<a>', {'class' : settings.classes.join(' ')})
-        				.appendTo($bckTop)
-        				.click(function(e) {
-        					e.preventDefault();
-    	                    _click();
-        	
-        				});
+        $bckTopLink = $('<a>', {'class' : settings.classes.join(' ')}).appendTo($bckTop).click(function(e) {e.preventDefault(); _click();});
         
         //public methods that can be overridden
-        var toRemove = [];
+        //var toRemove = [];
         this.scrollRAF = function() {
             var params = handleScrollingSide($w.scrollTop()),
             lastState = state;
@@ -94,23 +88,23 @@ copyright NOE Interactive
             if((!settings.goTop.hideOn || scrollTop <= settings.goTop.hideOn) && scrollTop >= settings.goTop.showOn) {
                 if(state !== 'top') {
                     state = 'top';  
-                    $bckTopLink.text(settings.goTop.title).addClass(settings.goTop.class);
+                    $bckTopLink.text(settings.goTop.title).addClass(settings.goTop.classes);
                 }
             } else if(state === 'top') {
                 state = '';
-                //toRemove.push(settings.goTop.class);
-                $bckTopLink.removeClass(settings.goTop.class);
+                //toRemove.push(settings.goTop.classes);
+                $bckTopLink.removeClass(settings.goTop.classes);
             } 
             
              if((!settings.goBottom.hideOn || scrollTop <= settings.goBottom.hideOn) && scrollTop >= settings.goBottom.showOn) {
                  if(state !== 'bottom') {
                     state = 'bottom';  
-                    $bckTopLink.text(settings.goBottom.title).addClass(settings.goBottom.class);
+                    $bckTopLink.text(settings.goBottom.title).addClass(settings.goBottom.classes);
                 }
             } else if(state === 'bottom') {
                 state = '';
-                $bckTopLink.removeClass(settings.goBottom.class);
-                //toRemove.push(settings.goBottom.class);
+                $bckTopLink.removeClass(settings.goBottom.classes);
+                //toRemove.push(settings.goBottom.classes);
             }
             /*
             if(lastState === '' && state !== '') {
